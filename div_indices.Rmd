@@ -1,0 +1,120 @@
+---
+title: "Comparing MDAT diversity metrics"
+author: "emily shumchenia"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r load data, include=FALSE}
+
+## required packages
+library(dplyr)
+library(raster)
+library(viridis)
+library(Hmisc)
+library(knitr)
+library(kableExtra)
+
+## load data: these are rasters of species richness, shannon index, and simpson index for mdat cetacean models.
+
+cet_richness <-raster("~/Dropbox/Research/mdat_diversity_indices/data/mammal_richness_Cetaceans.tif")
+cet_simpson <-raster("~/Dropbox/Research/mdat_diversity_indices/data/mammal_simpson_Cetaceans.tif")
+cet_shannon <-raster("~/Dropbox/Research/mdat_diversity_indices/data/mammal_shannon_Cetaceans.tif")
+
+## clip all rasters to the same extent as richness
+cet_simpson <-crop(cet_simpson, extent(-347000, 1803000, -1081000, 1519000))
+cet_shannon <-crop(cet_shannon, extent(-347000, 1803000, -1081000, 1519000))
+
+```
+
+##Purpose
+
+The purpose of this document is to explore the similarities and differences 
+among the three diversity metrics calculated for MDAT products, and what those 
+might mean ecologically.  
+
+We'll be looking at Species Richness, Shannon Diversity, and Simpson Diversity
+for all cetacean species:  
+
+```{r maps, echo=FALSE}
+
+## plot the three maps
+par(mfrow=c(2,3))
+plot(cet_richness, main="Cetacean Species Richness", col=viridis(256), axes=FALSE)
+plot(cet_shannon, main="Cetacean Shannon Diversity", col=viridis(256), axes=FALSE)
+plot(cet_simpson, main="Cetacean Simpson Diversity", col=viridis(256), axes=FALSE)
+hist(cet_richness, main=NULL, col=viridis(12), xlab="Species Richness")
+hist(cet_shannon, main=NULL,  col=viridis(13), xlab="Shannon Diversity")
+hist(cet_simpson, main=NULL,  col=viridis(18), xlab="Simpson Diversity")
+
+```
+
+##Quick comparison
+From the maps we can tell that Shannon and Simpson are more similar to each other than either of them are to Species Richness. We can check this by doing a simple correlation between each pair of metrics:  
+
+```{r metrics_corr, echo=FALSE, results='asis'}
+
+## make a raster stack for each species group's set of diversity metrics
+cet_stack <- stack(cet_richness, cet_simpson, cet_shannon)
+
+
+## extract each stack's values to a table
+cet_metrics <-values(cet_stack)
+
+
+## change the column headers
+colnames(cet_metrics) <- c("richness", "simpson", "shannon")
+
+
+## calculate correlations among diversity metrics, save as data frame object, display the table
+cet_metrics_corr <-rcorr(as.matrix(cet_metrics))
+df_metrics_corr <-data.frame(cet_metrics_corr$r)
+kable(df_metrics_corr, digits=2)
+
+```
+
+##Ecological relationships
+```{r regressions, include=FALSE}
+
+## load bathymetry data and crop to the same extent as richness
+bathy <-raster("~/Dropbox/Research/mdat_diversity_indices/data/ETOPO1_mdat.tif")
+bathy <-crop(bathy, extent(-347000, 1803000, -1081000, 1519000))
+
+## make the cet_metrics object into a dataframe, omitting NAs
+cet_metrics_df <-data.frame(cet_metrics)
+cet_metrics_df <-na.omit(cet_metrics_df)
+
+## extract water depth values from bathy raster to a data object, omitting NAs
+depths <-values(bathy)
+depths <-data.frame(depths)
+depths <-na.omit(depths)
+
+## calculate regressions of metrics and water depth
+richness_depth <-lm(cet_metrics_df$richness ~ depths$depths)
+summary(richness_depth)
+
+shannon_depth <-lm(cet_metrics_df$shannon ~ depths$depths)
+summary(shannon_depth)
+
+simpson_depth <-lm(cet_metrics_df$simpson ~ depths$depths)
+summary(simpson_depth)
+
+## make table of the results
+results <-matrix(c(.41, .001, .29, .001, .19, .001), ncol=2, byrow=TRUE)
+colnames(results) <- c("r", "p")
+rownames(results) <- c("richness", "shannon", "simpson")
+results <-as.table(results)
+
+```
+Which diversity metric can best discriminate between different ocean habitats? Knowing which metric is best could help users choose which metric to use in spatial planning decisions. An important cetacean habitat variable is depth. A linear regression of each diveristy metric on water depth can help determine which metric most strongly shows this association.  
+
+```{r regresion results, echo=FALSE, results='asis'}
+
+
+plot(bathy, main="Water depth (m)", col=magma(256), axes=FALSE)
+kable(results, caption="Linear regression with depth", format="html") %>%
+  kable_styling(bootstrap_options = "striped", full_width = F)
+
+```
