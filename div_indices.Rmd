@@ -14,7 +14,7 @@ library(viridis)
 library(Hmisc)
 library(knitr)
 library(kableExtra)
-library(rPython)
+library(gridExtra)
 
 ## load data: these are rasters of species richness, shannon index, and simpson index for mdat cetacean models.
 
@@ -28,9 +28,11 @@ cet_shannon <-crop(cet_shannon, extent(-347000, 1803000, -1081000, 1519000))
 
 ```
 ## Take-home message
-* If you are concerned about accounting for and considering rare species, **SPECIES RICHNESS** does the best job, by representing every species equally, regardless of abundance
-* If you care about rare species, but need to give some additional consideration to species that are particularly abundant, the **SHANNON INDEX** does a good job
-* If abundant or dominant species are important for your analysis, the **SIMPSON INDEX** gives more weight to highly abundant species, to the detriment of the representation of the rarest species
+> If you are concerned about accounting for and considering rare species, **SPECIES RICHNESS** does the best job, by representing every species equally, regardless of abundance
+>
+> If you care about rare species, but need to give some additional consideration to species that are particularly abundant, the **SHANNON INDEX** does a good job
+>
+> If abundant or dominant species are important for your analysis, the **SIMPSON INDEX** gives more weight to highly abundant species, to the detriment of the representation of the rarest species
 
 ## Introduction
 What are diversity metrics?  
@@ -136,9 +138,10 @@ An important cetacean habitat variable is depth. A linear regression of each div
 
 ```{r regresion results, echo=FALSE, results='asis'}
 
-par(mfrow=c(1,2))
+par(mfrow = c(1, 2), oma = c( 0, 0, 2, 0 ))
 plot(bathy, main="Water depth (m)", col=magma(256), axes=FALSE)
 kable(results, caption="Linear regression with depth", format="html") %>%
   kable_styling(bootstrap_options = "striped", full_width=FALSE)
+title("Diversity metric responses to depth", outer=TRUE)
 
 ```
