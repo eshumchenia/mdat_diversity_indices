@@ -13,7 +13,7 @@ library(raster)
 library(viridis)
 library(Hmisc)
 library(knitr)
-library(kableExtra)
+library(ggplot2)
 library(gridExtra)
 
 ## load data: these are rasters of species richness, shannon index, and simpson index for mdat cetacean models.
@@ -33,6 +33,8 @@ cet_shannon <-crop(cet_shannon, extent(-347000, 1803000, -1081000, 1519000))
 > If you care about rare species, but need to give some additional consideration to species that are particularly abundant, the **SHANNON INDEX** does a good job
 >
 > If abundant or dominant species are important for your analysis, the **SIMPSON INDEX** gives more weight to highly abundant species, to the detriment of the representation of the rarest species
+>
+> **EACH DIVERSITY METRIC** may respond differently to ecological features. If you care about a specific habitat type or ecological component, you may want to examine the behavior of all three metrics to help select the most responsive measure.
 
 ## Introduction
 What are diversity metrics?  
@@ -48,11 +50,11 @@ Because each metric integrates information differently, it is important to know 
 
 MDAT has represented diversity with three different metrics: Species Richness, the Shannon Index, and the Simpson Index. The purpose of this document is to explore a few questions about these metrics:  
 
-* How are the metrics similar or different?
-* How do their  results compare to each other?
-* Do they each capture similar ecological patterns?
+1. Are the metrics similar or different?
+2. How do their  results compare to one another?
+3. Do the metrics represent ecological patterns similarly?
 
-Here are maps (top row) and histograms (bottom row) for Species Richness, Shannon Diversity, and Simpson Diversity for all cetacean species:  
+Below are maps (top row) and histograms (bottom row) for Species Richness, Shannon Diversity, and Simpson Diversity for all cetacean species:  
 
 ```{r maps, echo=FALSE}
 
@@ -67,8 +69,8 @@ hist(cet_simpson, main=NULL,  col=viridis(18), xlab="Simpson Diversity")
 
 ```
 
-##Quick comparison
-From the maps and histograms we can tell that Shannon and Simpson are more similar to each other than either of them are to Species Richness. We can check this by doing a simple correlation between each pair of metrics:  
+## QUESTION: Are the metrics similar or different?
+ANSWER: From the maps and histograms we can tell that Shannon and Simpson are more similar to each other than either of them are to Species Richness. We can check this by doing a simple correlation between each pair of metrics:  
 
 ```{r metrics_corr, echo=FALSE, results='asis'}
 
@@ -90,16 +92,16 @@ kable(df_metrics_corr, digits=2)
 
 This result is not surprising since both Shannon and Simpson indices consider abundance information, and Species Richness does not.
 
-##Comparing numeric results
-To delve more deeply into how each index deals with abundance information, we can plot the Shannon and Simpson results together, showing how abundance information at each location has contributed to each diversity index value for that location:  
+## QUESTION: How do the metrics' results compare to one another?
+We know that results for Species Richness are quite different from both Shannon and Simpson results. To understand differences in the results of these two indices (how each deals differenetly with abundance information), we can plot the Shannon and Simpson results together. The plot below shows how abundance information at each location has contributed to each diversity index value for that location:  
 
 [insert plot from Jesse]  
 
-This plot shows that for low to medium abundance values, both the Shannon Index and Simpson index generate comparable diversity results. However, for high abundance values, the Simpson index generates a proportionally much higher diversity value than the Shannon index.  
+ANSWER: This plot shows that for low to medium abundance values, both the Shannon Index and Simpson index generate comparable diversity results. However, for high abundance values, the Simpson index generates a proportionally much higher diversity value than the Shannon index.  
 
 This result indicates that the Simpson index gives more weight to highly abundant species than the Shannon index. The Shannon index treats rare species and dominant species more equally.
 
-##Ecological relationships
+##QUESTION: Do the metrics represent ecological patterns similarly?
 ```{r regressions, include=FALSE}
 
 ## load bathymetry data and crop to the same extent as richness
@@ -110,19 +112,24 @@ bathy <-crop(bathy, extent(-347000, 1803000, -1081000, 1519000))
 cet_metrics_df <-data.frame(cet_metrics)
 cet_metrics_df <-na.omit(cet_metrics_df)
 
-## extract water depth values from bathy raster to a data object, omitting NAs
+## extract water depth values from bathy raster to a data object, omitting NAs and reversing sign
 depths <-values(bathy)
 depths <-data.frame(depths)
 depths <-na.omit(depths)
+depths <-depths*-1
+
+## combine all the data into a single data frame
+alldata <- data.frame(cet_metrics_df$richness, cet_metrics_df$shannon, cet_metrics_df$simpson, depths$depths)
+colnames(alldata) <- c("richness", "shannon", "simpson", "depth")
 
 ## calculate regressions of metrics and water depth
-richness_depth <-lm(cet_metrics_df$richness ~ depths$depths)
+richness_depth <-lm(richness ~ depth, alldata)
 summary(richness_depth)
 
-shannon_depth <-lm(cet_metrics_df$shannon ~ depths$depths)
+shannon_depth <-lm(shannon ~ depth, alldata)
 summary(shannon_depth)
 
-simpson_depth <-lm(cet_metrics_df$simpson ~ depths$depths)
+simpson_depth <-lm(simpson ~ depth, alldata)
 summary(simpson_depth)
 
 ## make table of the results
@@ -132,16 +139,31 @@ rownames(results) <- c("richness", "shannon", "simpson")
 results <-as.table(results)
 
 ```
-Does each metric represent diversity similarly across different ocean habitats? In other words, will each metric give us the same answer to the question: "which habitats have high diversity and which have lower diversity?"   
+We know that depth is an important habitat variable for cetaceans - certain groups of species spend more time in deeper water, while other species have more coastal distributions.  
 
-An important cetacean habitat variable is depth. A linear regression of each diveristy metric on water depth will help explain whether the three metrics respond similarly to real changes in diversity that may occur with depth.  
+So, does each metric represent cetacean diversity similarly across different ocean habitats? In other words, will each metric give us the same answer to the question: "how does cetacean diversity respond to depth?"   
 
-```{r regresion results, echo=FALSE, results='asis'}
+A linear regression of each diveristy metric on water depth will help explain whether the three metrics respond similarly to real changes in cetacean diversity that may occur with depth.  
 
-par(mfrow = c(1, 2), oma = c( 0, 0, 2, 0 ))
-plot(bathy, main="Water depth (m)", col=magma(256), axes=FALSE)
-kable(results, caption="Linear regression with depth", format="html") %>%
-  kable_styling(bootstrap_options = "striped", full_width=FALSE)
-title("Diversity metric responses to depth", outer=TRUE)
+```{r regression_results, echo=FALSE, results='asis'}
+
+r1 <- ggplot(alldata, aes(depth, richness)) + 
+  geom_point(shape=16, alpha=1/4) +
+  geom_smooth(method=lm)
+r2 <- ggplot(alldata, aes(depth, shannon)) +
+  geom_point(shape=16, color="red", alpha=1/4) +
+  geom_smooth(method=lm, color="black")
+r3 <- ggplot(alldata, aes(depth, simpson)) +
+  geom_point(shape=16, color="blue", alpha=1/4) +
+  geom_smooth(method=lm, color="black")
+
+t <- tableGrob(results)
+
+grid.arrange(r1, r2, r3, t, ncol=2)
 
 ```
+
+ANSWER: While the general response of each metric to depth is similar (all show increasing diversity with depth), the strength of each relationship is different. In this case, Species Richness is most responsive to changes in depth.
+
+
+
