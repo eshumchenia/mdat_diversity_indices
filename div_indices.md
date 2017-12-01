@@ -79,4 +79,4 @@ A linear regression of each diveristy metric on water depth will help explain wh
 
 **ANSWER:** While the general response of each metric to depth is similar (all show increasing diversity with depth), the strength of each relationship is different. In this case, Species Richness is most responsive to changes in depth.
 
-Back to [Take-home message](###Take-home%20message)
+Back to [Take-home message](#Take-home%20message)
