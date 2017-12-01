@@ -170,4 +170,4 @@ grid.arrange(r1, r2, r3, t, ncol=2)
 
 **ANSWER:** While the general response of each metric to depth is similar (all show increasing diversity with depth), the strength of each relationship is different. In this case, Species Richness is most responsive to changes in depth.
 
-Back to [Take-home message](#Take-home message)
+Back to [Take-home message](#take-home-message)
