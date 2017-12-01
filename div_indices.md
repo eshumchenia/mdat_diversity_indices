@@ -47,7 +47,7 @@ Below are the maps maps and data for Species Richness, Shannon Diversity, and Si
 
 ### QUESTION: Are the metrics similar or different?
 
-ANSWER: From the maps and histograms we can tell that Shannon and Simpson are more similar to each other than either of them are to Species Richness. We can check this by doing a simple correlation between each pair of metrics (a value of 1.00 = a perfect correlation):
+**ANSWER:** From the maps and histograms we can tell that Shannon and Simpson are more similar to each other than either of them are to Species Richness. We can check this by doing a simple correlation between each pair of metrics (a value of 1.00 = a perfect correlation):
 
 |          |  richness|  shannon|  simpson|
 |----------|---------:|--------:|--------:|
@@ -63,7 +63,7 @@ We know that results for Species Richness are quite different from both Shannon 
 
 \[insert plot from Jesse\]
 
-ANSWER: This plot shows that for low to medium abundance values, both the Shannon Index and Simpson indices generate comparable diversity results. However, for high abundance values, the Simpson index generates a proportionally much higher diversity value than the Shannon index.
+**ANSWER:** This plot shows that for low to medium abundance values, both the Shannon Index and Simpson indices generate comparable diversity results. However, for high abundance values, the Simpson index generates a proportionally much higher diversity value than the Shannon index.
 
 This result indicates that the Simpson index gives more weight to highly abundant species than the Shannon index. The Shannon index treats rare species and dominant species more equally.
 
@@ -77,6 +77,6 @@ A linear regression of each diveristy metric on water depth will help explain wh
 
 ![](div_indices_files/figure-markdown_github-ascii_identifiers/regression_results-1.png)
 
-ANSWER: While the general response of each metric to depth is similar (all show increasing diversity with depth), the strength of each relationship is different. In this case, Species Richness is most responsive to changes in depth.
+**ANSWER:** While the general response of each metric to depth is similar (all show increasing diversity with depth), the strength of each relationship is different. In this case, Species Richness is most responsive to changes in depth.
 
-Back to [Take-home message](###%20Take-home%20message)
+Back to [Take-home message](###Take-home%20message)
