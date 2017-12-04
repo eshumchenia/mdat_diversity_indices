@@ -64,7 +64,7 @@ Below are the maps maps and data for Species Richness, Shannon Diversity, and Si
 ```{r maps, echo=FALSE}
 
 ## plot the three maps
-par(mfrow=c(3,2))
+par(mfrow=c(3,2),type="m")
 plot(cet_richness, main="Cetacean Species Richness", col=viridis(256), axes=FALSE)
 hist(cet_richness, main=NULL, col=viridis(12), xlab="Species Richness")
 plot(cet_shannon, main="Cetacean Shannon Diversity", col=viridis(256), axes=FALSE)
