@@ -43,9 +43,6 @@ MDAT has developed diversity data products using three different metrics: [Speci
 
 Below are the maps maps and data for Species Richness, Shannon Diversity, and Simpson Diversity for all cetacean species that we will use to help answer these questions.
 
-    ## Warning in par(mfrow = c(3, 2), type = "m"): graphical parameter "type" is
-    ## obsolete
-
 ![](div_indices_files/figure-markdown_github-ascii_identifiers/maps-1.png)
 
 ### QUESTION: Are the metrics similar or different?
