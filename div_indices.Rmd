@@ -64,12 +64,12 @@ Below are the maps maps and data for Species Richness, Shannon Diversity, and Si
 ```{r maps, echo=FALSE}
 
 ## plot the three maps
-par(mfrow=c(2,3))
+par(mfrow=c(3,2))
 plot(cet_richness, main="Cetacean Species Richness", col=viridis(256), axes=FALSE)
-plot(cet_shannon, main="Cetacean Shannon Diversity", col=viridis(256), axes=FALSE)
-plot(cet_simpson, main="Cetacean Simpson Diversity", col=viridis(256), axes=FALSE)
 hist(cet_richness, main=NULL, col=viridis(12), xlab="Species Richness")
+plot(cet_shannon, main="Cetacean Shannon Diversity", col=viridis(256), axes=FALSE)
 hist(cet_shannon, main=NULL,  col=viridis(13), xlab="Shannon Diversity")
+plot(cet_simpson, main="Cetacean Simpson Diversity", col=viridis(256), axes=FALSE)
 hist(cet_simpson, main=NULL,  col=viridis(18), xlab="Simpson Diversity")
 
 ```

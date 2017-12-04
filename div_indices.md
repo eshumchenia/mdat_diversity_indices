@@ -1,7 +1,7 @@
 Comparing MDAT diversity metrics
 ================
 emily shumchenia
-01 December 2017
+04 December 2017
 
 Intended audience and purpose
 -----------------------------
