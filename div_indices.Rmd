@@ -31,11 +31,11 @@ cet_shannon <-crop(cet_shannon, extent(-347000, 1803000, -1081000, 1519000))
 
 ```
 ###Take-home message
-> If you are concerned about accounting for and considering rare species, **SPECIES RICHNESS** does the best job, by representing every species equally, regardless of abundance
+> If you are concerned about accounting for and considering rare species, **SPECIES RICHNESS** does the best job, by representing every species equally, regardless of abundance. However, temporal trends in species richness are insufficient to capture key changes in biodiversity in changing environments.
 >
-> If you care about rare species, but need to give some additional consideration to species that are particularly abundant, the **SHANNON INDEX** does a good job
+> If you care about rare species, but need to give some additional consideration to species that are particularly abundant, the **SHANNON INDEX** does a good job.
 >
-> If abundant or dominant species are important for your analysis, the **SIMPSON INDEX** gives more weight to highly abundant species, to the detriment of the representation of the rarest species
+> If abundant or dominant species are important for your analysis, the **SIMPSON INDEX** gives more weight to highly abundant species, to the detriment of the representation of the rarest species.
 >
 > **EACH DIVERSITY METRIC** may respond differently to ecological features. If you care about a specific habitat type or ecological component, you may want to examine the behavior of all three metrics to help select the most responsive measure.
 
@@ -47,7 +47,7 @@ When most people think about diversity, they think about the total number of spe
 
 [Diversity indices](https://en.wikipedia.org/wiki/Diversity_index) are more complex metrics that take the total number of species *and* their abundances into account (in different ways, depending on the index).  
 
-Experts in the region have indicated that each metric is valuable for different reasons.  
+Experts in the region have indicated that each metric is valuable for different reasons. The scientific literature underscores the need to [consider multiple diversity indices, even though some may seem interchangeable](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4224527/). In general, [diversity indices that reflect species dominance and identity are more effective than Species Richness for tracking change over time](http://onlinelibrary.wiley.com/doi/10.1111/1365-2664.12959/epdf). 
 
 Because each metric integrates information differently, it is important to know how they are similar or different, and how the outputs could be used.
 
