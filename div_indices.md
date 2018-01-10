@@ -1,7 +1,7 @@
 Comparing MDAT diversity metrics
 ================
 emily shumchenia
-05 December 2017
+10 January 2018
 
 Intended audience and purpose
 -----------------------------
@@ -10,7 +10,7 @@ This document is intended for [Northeast Ocean Data Portal](http://www.northeast
 
 ### Take-home message
 
-> If you are concerned about accounting for and considering rare species, **SPECIES RICHNESS** does the best job, by representing every species equally, regardless of abundance. However, temporal trends in species richness are insufficient to capture key changes in biodiversity in changing environments.
+> If you are most concerned about accounting for and considering rare species, **SPECIES RICHNESS** does the best job, by representing every species equally, regardless of abundance. However, temporal trends in species richness will not capture any changes to community composition in changing environments. For this reason, a biodiversity metric may be more useful for monitoring.
 >
 > If you care about rare species, but need to give some additional consideration to species that are particularly abundant, the **SHANNON INDEX** does a good job.
 >
@@ -49,23 +49,23 @@ Below are the maps maps and data for Species Richness, Shannon Diversity, and Si
 
 **ANSWER:** From the maps and histograms we can tell that Shannon and Simpson are more similar to each other than either of them are to Species Richness. We can check this by doing a simple correlation between each pair of metrics (a value of 1.00 = a perfect correlation):
 
-|          |  richness|  shannon|  simpson|
-|----------|---------:|--------:|--------:|
-| richness |      1.00|     0.56|     0.49|
-| shannon  |      0.56|     1.00|     0.96|
-| simpson  |      0.49|     0.96|     1.00|
+![](div_indices_files/figure-markdown_github-ascii_identifiers/metrics_corr-1.png)
 
 This result is not surprising since both Shannon and Simpson indices consider abundance information, and Species Richness does not.
 
 ### QUESTION: How do the metrics' results compare to one another?
 
-We know that results for Species Richness are quite different from both Shannon and Simpson results. To understand differences in the results of these two indices (how each deals differently with abundance information), we can plot the Shannon and Simpson results together. The plot below shows how abundance information at each location has contributed to each diversity index value for that location:
+We know that results for Species Richness are quite different from both Shannon and Simpson results. To understand differences in the results of these two indices (how each deals differently with abundance information), we can plot the Shannon and Simpson results together. The plots below shows how multiple species abundance and richness information at each location has contributed to each diversity index value for a single pixel with relatively high diversity.
 
-\[insert plot from Jesse\]
+The first graph shows the density (abundance per unit area) values for all mammal species present in this pixel, and the number of species present (richness) at these densities. Note that there are many species with very low (near zero) densities in this pixel.
 
-**ANSWER:** This plot shows that for low to medium abundance values, both the Shannon Index and Simpson indices generate comparable diversity results. However, for high abundance values, the Simpson index generates a proportionally much higher diversity value than the Shannon index.
+The second graph plots the contribution of each density/richness observation to the total diversity index value for both the Shannon index and the Simpson Index. Note that there is only 1 species present at the highest density value of ~2.5 (top graph), but this observation contributes proportionally much more to the final Simpson index value (~35% of its total) than to the final Shannon index value (~10% of its total; bottom graph).
 
-This result indicates that the Simpson index gives more weight to highly abundant species than the Shannon index. The Shannon index treats rare species and dominant species more equally.
+![cetacean diversity components](data/Mammal_Diversity_Components_High.png)
+
+**ANSWER:** These plots show that both the Shannon Index and Simpson Index consider low to medium density values comparably. However, species with high densities contribute much more, proportionally, to the Simpson index than to the Shannon Index.
+
+This result indicates that the Simpson index gives more weight to highly abundant or dominant species than the Shannon index. The Shannon index treats rare species and dominant species more equally.
 
 ### QUESTION: Do the metrics represent ecological patterns similarly?
 
