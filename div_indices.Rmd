@@ -76,7 +76,7 @@ hist(cet_simpson, main=NULL,  col=viridis(18), xlab="Simpson Diversity")
 ```
 
 ###QUESTION: Are the metrics similar or different?
-**ANSWER:** From the maps and histograms we can tell that Shannon and Simpson are more similar to each other than either of them are to Species Richness. We can check this by doing a simple correlation between each pair of metrics (a value of 1.00 = a perfect correlation):  
+**ANSWER:** From the maps and histograms we can tell that Shannon and Simpson are more similar to each other than either of them are to Species Richness. We can check this by doing a simple correlation between each pair of metrics (a value of 1.0 = a perfect positive correlation, a value of -1.0 = a perfect negative correlation):  
 
 ```{r metrics_corr, echo=FALSE, results='asis'}
 
